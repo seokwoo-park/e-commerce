@@ -10,8 +10,6 @@ const Cart = ({ cart, handleCartQuantity, handleRemoveCart, handleEmptyCart }) =
 
     const classes = useStyles()
 
-    console.log(cart)
-
     const EmptyCart = () => (
         <Typography variant="subtitle1">You have no itmes in your shopping cart, 
             <Link to="/" className={classes.link}>start adding some </Link>!
@@ -33,7 +31,7 @@ const Cart = ({ cart, handleCartQuantity, handleRemoveCart, handleEmptyCart }) =
                 </Typography>
                 <div>
                     <Button className={classes.emptyButton} size="large" type="button" variant="contained" color="secondary" onClick={handleEmptyCart}>Empty Cart</Button>
-                    <Button className={classes.checkoutButton} size="large" type="button" variant="contained" color="primary">Check Out</Button>
+                    <Button component={Link} to="/checkout" className={classes.checkoutButton} size="large" type="button" variant="contained" color="primary">Check Out</Button>
                 </div>
             </div>
         </React.Fragment>
