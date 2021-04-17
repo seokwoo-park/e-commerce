@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Paper, Stepper, Step, StepLabel, Typography, CircularProgress, Divider, Button} from '@material-ui/core'
+import { Paper, Stepper, Step, StepLabel, Typography, CircularProgress, Divider, Button, CssBaseline} from '@material-ui/core'
+import { Link,useHistory } from 'react-router-dom'
 
 import { commerce } from '../../../library/commerce'
 import useStyles from './styles'
@@ -8,12 +9,20 @@ import PaymentForm from '../PaymentForm'
 
 const steps = ['Shipping address', 'Payment details']
 
-const Checkout = ({ cart }) => {
+const Checkout = ({ 
+    cart,
+    order,
+    onCaptureCheckout,
+    error }) => {
 
     const classes = useStyles()
     const [activeStep, setActiveStep] = useState(0)
     const [checkoutToken, setCheckoutToken] = useState(null)
     const [shippingData, setShippingData] = useState({})
+
+    const history = useHistory()
+
+    console.log(order)
 
     useEffect(()=>{
         const generateToken = async () => {
@@ -23,7 +32,7 @@ const Checkout = ({ cart }) => {
                 console.log(token)
                 setCheckoutToken(token)
             } catch (error) {
-                console.log('ERRORRR!!!')
+                history.push('/')
             }
         }
 
@@ -42,17 +51,24 @@ const Checkout = ({ cart }) => {
     console.log(shippingData)
 
     const Confirmation = () => (
-        <div>
-            Confirmation
-        </div>
-    )
+        <>
+          <div>
+            <Typography variant="h5">Thank you for your purchase!</Typography>
+            <Divider className={classes.divider} />
+          </div>
+          <br />
+          <Button component={Link} variant="outlined" type="button" to="/">Back to home</Button>
+        </>
+      ) 
+      ;
 
     const Form = () =>  activeStep === 0 
     ? <AddressForm checkoutToken={checkoutToken} next={next}/> 
-    : <PaymentForm shippingData={shippingData} checkoutToken={checkoutToken} backStep={backStep}/>
+    : <PaymentForm shippingData={shippingData} checkoutToken={checkoutToken} backStep={backStep} nextStep={nextStep} onCaptureCheckout={onCaptureCheckout}/>
 
     return (
         <React.Fragment>
+            <CssBaseline/>
             <div className={classes.toolbar}/>
             <main className={classes.layout}>
                 <Paper className={classes.paper}>
